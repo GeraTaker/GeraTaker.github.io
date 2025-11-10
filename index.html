@@ -1,25 +1,357 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Gera · Portafolio</title>
-  <style>
-    html,body{height:100%} body{
-      margin:0; display:flex; align-items:center; justify-content:center;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Helvetica,Arial,sans-serif;
-      background:#f7f7f8; color:#111;
-    }
-    .card{background:#fff; padding:32px; border-radius:16px; box-shadow:0 10px 30px rgba(0,0,0,.06); text-align:center}
-    h1{margin:0 0 .5rem 0}
-    p{margin:.25rem 0}
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Currículum — GeraTaker</title>
+<meta name="description" content="Currículum Vitae de GeraTaker — Desarrollador Full Stack" />
+
+<style>
+  /* ====== Variables & Reset ====== */
+  :root{
+    --bg:#0f1115;
+    --paper:#ffffff;
+    --ink:#111318;
+    --muted:#5a6270;
+    --accent:#0aa27f;
+    --accent-ink:#063e32;
+    --chip:#e8f6f2;
+    --line:#e6e9f0;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,sans-serif;
+    line-height:1.55;
+    color:var(--ink);
+    background:linear-gradient(120deg, #0f1115 0%, #141924 100%);
+  }
+
+  /* ====== Layout ====== */
+  .page{
+    max-width: 1050px;
+    margin: min(6vh,4rem) auto;
+    background: var(--paper);
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 30px 65px rgba(0,0,0,.35), 0 2px 0 rgba(255,255,255,.08) inset;
+    display:grid;
+    grid-template-columns: 330px 1fr;
+    min-height: 75vh;
+  }
+  /* Left band (vertical name) */
+  .left{
+    background: conic-gradient(from 210deg at 60% 40%, #0aa27f 0 25%, #0b8d83 0 40%, #0e5d5a 0 55%, #0aa27f 0 100%);
+    color: #eafff8;
+    padding: 36px 28px 28px;
+    position: relative;
+  }
+  .brand{
+    position: absolute;
+    inset: 18px 18px auto 18px;
+    border: 2px solid rgba(255,255,255,.25);
+    border-radius: 14px;
+    padding: 14px 16px;
+    letter-spacing: .1em;
+    font-weight: 700;
+    text-transform: uppercase;
+    backdrop-filter: blur(2px);
+  }
+  .name{
+    margin-top: 82px;
+    font-size: clamp(28px, 4.6vw, 42px);
+    line-height: 1.05;
+    font-weight: 800;
+    letter-spacing:-.01em;
+  }
+  .role{
+    margin: 12px 0 20px;
+    font-weight:600;
+    opacity:.95;
+  }
+  .quote{
+    margin: 18px 0 26px;
+    padding: 14px 14px 14px 16px;
+    border-left: 4px solid rgba(255,255,255,.6);
+    background: rgba(0,0,0,.12);
+    border-radius: 10px;
+    font-size:.96rem;
+  }
+  .contact, .skills, .stack{
+    margin: 20px 0;
+    background: rgba(0,0,0,.12);
+    border: 1px solid rgba(255,255,255,.16);
+    border-radius: 12px;
+    padding: 14px;
+  }
+  .h3{
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing:.08em;
+    font-size:.82rem;
+    margin: 0 0 10px;
+    opacity:.9;
+  }
+  .list{
+    margin:0; padding:0; list-style:none;
+  }
+  .list li{
+    padding:6px 0;
+    border-bottom:1px dashed rgba(255,255,255,.18);
+  }
+  .list li:last-child{border-bottom:0}
+  a{color:#d8fff3; text-decoration:none; border-bottom:1px solid rgba(255,255,255,.35)}
+  a:hover{border-bottom-color:#fff}
+
+  /* Right content */
+  .right{
+    padding: 34px 34px 40px;
+    background:
+      radial-gradient(1200px 300px at 65% -80px, #e8fff9 0%, #ffffff 55%, #ffffff 100%);
+  }
+  .section{
+    margin-bottom: 26px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  .section:last-child{border-bottom:0}
+  .title{
+    display:flex; align-items:baseline; gap:8px;
+    margin:0 0 10px;
+  }
+  .title h2{
+    margin:0; font-size:1rem; text-transform:uppercase; letter-spacing:.12em; color:#0b6a58;
+  }
+  .title .dash{
+    flex:1; height:1px; background: linear-gradient(90deg, var(--line), transparent);
+  }
+
+  /* Summary */
+  .summary{
+    font-size:1.02rem; color:#1a1f26;
+    background:#f8fbfa; border:1px solid #e9f3ef; border-radius:12px; padding:14px 16px;
+  }
+
+  /* Experience timeline */
+  .timeline{
+    position:relative; margin-top:10px;
+  }
+  .timeline::before{
+    content:""; position:absolute; left:8px; top:0; bottom:0; width:2px; background: linear-gradient(#dfe9e6, #cfe4de);
+  }
+  .job{
+    position:relative; padding-left:28px; margin:0 0 18px;
+  }
+  .job::before{
+    content:""; position:absolute; left:1px; top:.5em; width:14px; height:14px; border-radius:50%;
+    background: var(--chip); border:2px solid var(--accent);
+    box-shadow: 0 0 0 4px rgba(10,162,127,.12);
+  }
+  .job h3{margin:.1rem 0 .2rem; font-size:1.02rem}
+  .job .meta{color:var(--muted); font-size:.9rem; margin-bottom:.35rem}
+  .job ul{margin:.4rem 0 .2rem 1rem}
+  .job ul li{margin:.25rem 0}
+
+  /* Projects grid */
+  .grid{
+    display:grid; gap:14px;
+    grid-template-columns: repeat(12, 1fr);
+  }
+  .card{
+    grid-column: span 6;
+    background:#ffffff; border:1px solid var(--line); border-radius:14px; padding:12px 14px;
+  }
+  .card h4{margin:.1rem 0 .35rem; font-size:1rem}
+  .tagbar{display:flex; flex-wrap:wrap; gap:8px; margin-top:8px}
+  .chip{
+    background:var(--chip); color:var(--accent-ink);
+    border:1px solid #cbeee4; padding:4px 8px; border-radius:999px; font-size:.84rem; font-weight:600;
+  }
+
+  /* Two columns in details */
+  .twocol{
+    display:grid; grid-template-columns: 1fr 1fr; gap:14px;
+  }
+
+  /* Footer ribbon */
+  .ribbon{
+    margin-top:16px;
+    background: linear-gradient(90deg, #e7faf3, #ffffff);
+    border:1px solid var(--line);
+    border-radius:12px; padding:10px 12px; font-size:.92rem; color:#2a3038;
+  }
+
+  /* Responsive */
+  @media (max-width: 900px){
+    .page{grid-template-columns:1fr}
+    .left{border-bottom: 6px solid rgba(0,0,0,.12)}
+    .grid .card{grid-column: span 12}
+    .twocol{grid-template-columns:1fr}
+  }
+
+  /* Print (A4, márgenes chicos) */
+  @media print{
+    body{background:#fff}
+    .page{box-shadow:none; margin:0; border-radius:0; max-width:100%; min-height:auto}
+    .left{border:0}
+    .ribbon{border:0; background:#fff}
+    a{color:inherit; border:0}
+  }
+</style>
 </head>
 <body>
-  <div class="card">
-    <h1>Hola, soy Gera 👋</h1>
-    <p>Desarrollador PHP/Laravel · Yii · PostgreSQL · Vue/Vuetify</p>
-    <p><a href="mailto:tucorreo@ejemplo.com">Contáctame</a></p>
-  </div>
+
+<main class="page" role="main" aria-label="Currículum">
+  <!-- ===== Left band ===== -->
+  <aside class="left">
+    <div class="brand">CV</div>
+    <div class="name">Ing. Luis Gerardo<br> López Ruiz</div>
+    <div class="role">Desarrollador Full-Stack</div>
+
+    <div class="quote">
+      “Transformo procesos académicos en experiencias fluidas:
+      de datos en bruto a reportes impecables y verificables.”
+    </div>
+
+    <section class="contact">
+      <div class="h3">Contacto</div>
+      <ul class="list">
+        <li><!-- EDITAR --> Celaya, Gto., MX</li>
+        <li><!-- EDITAR --> gerardo@example.com</li>
+        <li><!-- EDITAR --> github.com/GeraTaker</li>
+        <li><!-- EDITAR --> linkedin.com/in/tu-usuario</li>
+      </ul>
+    </section>
+
+    <section class="skills">
+      <div class="h3">Habilidades Clave</div>
+      <ul class="list">
+        <li>PHP (Laravel, Yii)</li>
+        <li>PostgreSQL · PL/pgSQL</li>
+        <li>Vue · Vuetify · Bootstrap</li>
+        <li>mPDF · Blockcerts</li>
+        <li>Docker · Git · CI/CD</li>
+      </ul>
+    </section>
+
+    <section class="stack">
+      <div class="h3">Stack de trabajo</div>
+      <ul class="list">
+        <li>APIs REST · JSON</li>
+        <li>Optimización SQL</li>
+        <li>PDFs con fondos/folios</li>
+        <li>Diseño responsive</li>
+      </ul>
+    </section>
+  </aside>
+
+  <!-- ===== Right content ===== -->
+  <section class="right">
+    <!-- Summary -->
+    <section class="section">
+      <div class="title"><h2>Resumen</h2><div class="dash"></div></div>
+      <div class="summary">
+        Desarrollador con foco en **educación** y **gobernanza de datos**:
+        diseño de APIs, generación de **PDFs certificados**, y cálculo de **promedios escolares**
+        con reglas complejas en PL/pgSQL. Me gusta simplificar procesos y dejar
+        todo **documentado y automatizado**.
+      </div>
+    </section>
+
+    <!-- Experience -->
+    <section class="section">
+      <div class="title"><h2>Experiencia</h2><div class="dash"></div></div>
+
+      <div class="timeline">
+        <article class="job">
+          <h3>CETECH — Desarrollador Full-Stack</h3>
+          <div class="meta">2023 — Actual · Celaya (MX)</div>
+          <ul>
+            <li>Implementé **constancias digitales** con sello, folio y fondos; plantillas mPDF listas para impresión.</li>
+            <li>Optimicé funciones **PL/pgSQL** para promedios (CF, parciales dinámicos, redondeos/truncados).</li>
+            <li>Desarrollé **reportes Excel y PDF** de alta escala con tiempos de respuesta mejorados.</li>
+          </ul>
+        </article>
+
+        <article class="job">
+          <h3>Proyecto “Báscula Cloud” — Full-Stack</h3>
+          <div class="meta">2022 — 2023</div>
+          <ul>
+            <li>Sistema de logística para entradas/salidas de materiales, con soporte nivel 3.</li>
+            <li>APIs y vistas con **Laravel + Vue**, autenticación y control de estados.</li>
+          </ul>
+        </article>
+
+        <article class="job">
+          <h3>Freelance — Integraciones & PDFs</h3>
+          <div class="meta">2019 — 2022</div>
+          <ul>
+            <li>Automatización de **diplomas, boletas y constancias** con numeración y fondos.</li>
+            <li>Despliegues Docker; diagnósticos de performance en consultas SQL.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- Projects -->
+    <section class="section">
+      <div class="title"><h2>Proyectos destacados</h2><div class="dash"></div></div>
+
+      <div class="grid">
+        <article class="card">
+          <h4>Boleta Primaria / UTEC</h4>
+          <p>Plantillas PDF con **promedios dinámicos**, bandas institucionales y reglas configurables.</p>
+          <div class="tagbar">
+            <span class="chip">mPDF</span><span class="chip">PL/pgSQL</span><span class="chip">Laravel</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <h4>Verificador Blockcerts</h4>
+          <p>UI en Vue para verificar certificados en blockchain (Ethereum), con carga de JSON.</p>
+          <div class="tagbar">
+            <span class="chip">Vue</span><span class="chip">Blockchain</span><span class="chip">JSON</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <h4>Constancias Digitales IMSS</h4>
+          <p>Plantilla con fondo, firmas, periodos y validaciones de datos; generación inmediata.</p>
+          <div class="tagbar">
+            <span class="chip">mPDF</span><span class="chip">Laravel</span><span class="chip">UX de oficina</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <h4>Tutorías Académicas</h4>
+          <p>KPIs y reportes semestrales con consolidación de atenciones y canalizaciones.</p>
+          <div class="tagbar">
+            <span class="chip">Yii</span><span class="chip">PostgreSQL</span><span class="chip">DataViz</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Education & Extras -->
+    <section class="section twocol">
+      <div>
+        <div class="title"><h2>Educación</h2><div class="dash"></div></div>
+        <p><strong><!-- EDITAR --> Ingeniería en ...</strong><br><!-- EDITAR --> Universidad / Año</p>
+      </div>
+      <div>
+        <div class="title"><h2>Reconocimientos</h2><div class="dash"></div></div>
+        <p>Entrega oportuna y estandarización de plantillas PDF institucionales.</p>
+        <p>Mejora de performance en cálculos de promedios y reportes.</p>
+      </div>
+    </section>
+
+    <!-- Footer ribbon -->
+    <div class="ribbon">
+      Disponible para colaborar en proyectos de impacto educativo y automatización documental.
+    </div>
+  </section>
+</main>
+
 </body>
 </html>
